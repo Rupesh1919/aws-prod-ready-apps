@@ -1,0 +1,42 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "dev"
+  },
+  {
+    "ParameterKey": "CertificateArn",
+    "ParameterValue": "arn:aws:acm:REGION:ACCOUNT:certificate/CERTIFICATE-ID"
+  },
+  {
+    "ParameterKey": "ApiHostname",
+    "ParameterValue": "claims-api-dev.example.com"
+  },
+  {
+    "ParameterKey": "AllowedCIDRs",
+    "ParameterValue": "203.0.113.0/24,198.51.100.0/24"
+  },
+  {
+    "ParameterKey": "JwtIssuer",
+    "ParameterValue": "https://your-issuer.example.com"
+  },
+  {
+    "ParameterKey": "JwtAudience",
+    "ParameterValue": "claims-api"
+  },
+  {
+    "ParameterKey": "JwksUrl",
+    "ParameterValue": "https://your-issuer.example.com/.well-known/jwks.json"
+  },
+  {
+    "ParameterKey": "DesiredTaskCount",
+    "ParameterValue": "2"
+  },
+  {
+    "ParameterKey": "TaskCpu",
+    "ParameterValue": "512"
+  },
+  {
+    "ParameterKey": "TaskMemory",
+    "ParameterValue": "1024"
+  }
+]

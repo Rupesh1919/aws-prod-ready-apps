@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'ECR Repository for Claims API container images'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: dev
+    Description: Environment name for resource naming
+  
+  ImageTagMutability:
+    Type: String
+    Default: IMMUTABLE
+    AllowedValues: [MUTABLE, IMMUTABLE]
+    Description: Image tag mutability setting
+  
+  ScanOnPush:
+    Type: String
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+    Description: Enable automatic image scanning on push
+
+Resources:
+  Repository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub '${EnvironmentName}-claims-api'
+      ImageTagMutability: !Ref ImageTagMutability
+      ImageScanningConfiguration:
+        ScanOnPush: !Ref ScanOnPush
+      EncryptionConfiguration:
+        EncryptionType: AES256
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Keep last 10 images",
+                "selection": {
+                  "tagStatus": "any",
+                  "countType": "imageCountMoreThan",
+                  "countNumber": 10
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-claims-api'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+Outputs:
+  RepositoryUri:
+    Description: ECR Repository URI
+    Value: !GetAtt Repository.RepositoryUri
+    Export:
+      Name: !Sub '${EnvironmentName}-claims-ecr-uri'
+  
+  RepositoryArn:
+    Description: ECR Repository ARN
+    Value: !GetAtt Repository.Arn
+    Export:
+      Name: !Sub '${EnvironmentName}-claims-ecr-arn'
+  
+  RepositoryName:
+    Description: ECR Repository Name
+    Value: !Ref Repository
+    Export:
+      Name: !Sub '${EnvironmentName}-claims-ecr-name'
